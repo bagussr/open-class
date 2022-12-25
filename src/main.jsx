@@ -8,19 +8,6 @@ import { store } from './context/store';
 import { theme } from './utils/extendTheme';
 import '@fontsource/poppins';
 
-// ReactDOM.createRoot(
-//   document.getElementById('root'),
-//   <React.StrictMode>
-//     <BrowserRouter>
-//       <ChakraProvider theme={theme}>
-//         <ReduxProvider store={store}>
-//           <App />
-//         </ReduxProvider>
-//       </ChakraProvider>
-//     </BrowserRouter>
-//   </React.StrictMode>
-// );
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>

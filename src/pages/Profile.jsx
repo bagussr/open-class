@@ -15,7 +15,7 @@ import { Layout } from '../Component/Layout';
 import { NavBar } from '../Component/Header/NavBar';
 import { SideBar } from '../Component/Sidebar';
 
-export const Profile = () => {
+export const Profile = ({ edit }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [animate, setAnimate] = useState(false);
 
@@ -50,40 +50,42 @@ export const Profile = () => {
                 repellendus, eum voluptatibus eaque at sed assumenda?
               </Text>
             </VStack>
-            <VStack align='start'>
-              <Heading as='h3' fontSize='sm' fontWeight='normal'>
-                Informasi Pribadi
-              </Heading>
-              <VStack
-                as='form'
-                boxShadow='sm'
-                p='8'
-                spacing='5'
-                border='1px'
-                borderColor='gray.100'>
-                <Input
-                  type='text'
-                  variant='flushed'
-                  fontSize='md'
-                  placeholder='Nama Lengkap'
-                />
-                <Input
-                  type='text'
-                  variant='flushed'
-                  fontSize='md'
-                  placeholder='Deskripsi Diri'
-                />
-                <Input
-                  type='text'
-                  variant='flushed'
-                  fontSize='md'
-                  placeholder='Status'
-                />
-                <Button size='sm' variant='brand'>
-                  Simpan
-                </Button>
+            {edit === true ? (
+              <VStack align='start'>
+                <Heading as='h3' fontSize='sm' fontWeight='normal'>
+                  Informasi Pribadi
+                </Heading>
+                <VStack
+                  as='form'
+                  boxShadow='sm'
+                  p='8'
+                  spacing='5'
+                  border='1px'
+                  borderColor='gray.100'>
+                  <Input
+                    type='text'
+                    variant='flushed'
+                    fontSize='md'
+                    placeholder='Nama Lengkap'
+                  />
+                  <Input
+                    type='text'
+                    variant='flushed'
+                    fontSize='md'
+                    placeholder='Deskripsi Diri'
+                  />
+                  <Input
+                    type='text'
+                    variant='flushed'
+                    fontSize='md'
+                    placeholder='Status'
+                  />
+                  <Button size='sm' variant='brand'>
+                    Simpan
+                  </Button>
+                </VStack>
               </VStack>
-            </VStack>
+            ) : null}
           </Flex>
           <SideBar
             animate={animate}

@@ -27,6 +27,11 @@ export const App = () => {
         <Route exact path='/signup' element={<Register />} />
         <Route exact path='/kelas/detail/:id' element={<DetailKelas />} />
         <Route exact path='/profile/:id' element={<Profile />} />
+        <Route
+          exact
+          path='/profile/:id/edit'
+          element={<Profile edit={true} />}
+        />
         <Route exact path='*' element={<h1>Not Found</h1>} />
       </Routes>
     </HelmetProvider>
