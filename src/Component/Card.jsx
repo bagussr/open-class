@@ -14,7 +14,7 @@ import {
 import { BsClockFill } from 'react-icons/bs';
 import { FaMedal } from 'react-icons/fa';
 
-export const Card = () => {
+export const Card = ({ name, description, level }) => {
   return (
     <>
       <ChakraCard
@@ -40,7 +40,7 @@ export const Card = () => {
             transform='translate(-50%,50%)'
             align='center'>
             <Heading fontSize={{ md: 'lg', base: 'sm' }} as='h2' color='white'>
-              Front-End Developer
+              {name}
             </Heading>
             <Divider borderColor='white' />
           </Stack>
@@ -53,7 +53,7 @@ export const Card = () => {
             </Flex>
             <Flex align='center' gap='3'>
               <Icon as={FaMedal} color='brand.primary.100' w='5' h='5' />
-              <Text fontSize={{ md: '2xs', base: '3xs' }}>Pemula</Text>
+              <Text fontSize={{ md: '2xs', base: '3xs' }}>{level}</Text>
             </Flex>
             <Text
               fontSize={{ md: 'xs', base: '2xs' }}
@@ -61,10 +61,7 @@ export const Card = () => {
               wordBreak='break-all'
               textOverflow='clip'
               overflow='hidden'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi quas
-              eligendi, maiores esse eaque dolorem, similique rem tenetur cumque
-              odio unde iure nulla velit saepe tempora ad consectetur laborum
-              neque.
+              {description}
             </Text>
           </Stack>
         </CardBody>

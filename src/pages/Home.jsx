@@ -7,12 +7,35 @@ import {
   Container,
   SimpleGrid,
 } from '@chakra-ui/react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Layout } from '../Component/Layout';
 import { NavBar } from '../Component/Header/NavBar';
 import { Card } from '../Component/Card';
+import { settinguser } from '../context/Auth/authSlicer';
 
 export const Home = () => {
+  const auth = useSelector(state => state.auth);
+  const [kelas, setKelas] = useState([]);
+
+  const getKelas = async () => {
+    await axios
+      .get(
+        'https://openclass-api-gateway-production.up.railway.app/classrooms',
+        {
+          headers: {
+            authorization: `Bearer ${auth.key}`,
+          },
+        }
+      )
+      .then(res => setKelas(res.data.data.classrooms));
+  };
+
+  useEffect(() => {
+    getKelas();
+  }, []);
   return (
     <>
       <Layout title='Home | Open Class'>
@@ -47,8 +70,13 @@ export const Home = () => {
         <Container w='100% ' maxW='100%' p='10'>
           <Text>Semua Kelas</Text>
           <SimpleGrid minChildWidth='15rem' spacing='8' p='5' w='100%'>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => (
-              <Card key={x} />
+            {kelas.map(x => (
+              <Card
+                key={x.id}
+                name={x.name}
+                description={x.description}
+                level={x.level}
+              />
             ))}
           </SimpleGrid>
         </Container>

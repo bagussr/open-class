@@ -1,49 +1,47 @@
-import { Layout } from '../Component/Layout';
-import { NavBar } from '../Component/Header/NavBar';
 import {
   Box,
-  useDisclosure,
+  Button,
   Container,
-  SimpleGrid,
-  Heading,
-  Divider,
+  Flex,
+  useDisclosure,
   Text,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-
-import { Card } from '../Component/Card';
+import { useState, useEffect } from 'react';
+import { NavBar } from '../Component/Header/NavBar';
+import { Layout } from '../Component/Layout';
 import { SideBar } from '../Component/Sidebar';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { AiOutlinePlus } from 'react-icons/ai';
 
-export const Kelas = () => {
+export const KelasForum = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [animate, setAnimate] = useState(false);
-  const [kelas, setKelas] = useState([]);
+  const [forum, setForum] = useState([]);
+  const [user, setUser] = useState();
   const auth = useSelector(state => state.auth);
 
-  const getKelas = async () => {
+  const getUsers = async () => {
     await axios
       .get(
-        'https://openclass-api-gateway-production.up.railway.app/classrooms/my-created-classrooms',
+        'https://openclass-api-gateway-production.up.railway.app/users/profiles',
         {
           headers: {
             authorization: `Bearer ${auth.key}`,
           },
         }
       )
-      .then(res => setKelas(res.data.data.classrooms));
+      .then(res => setUser(res.data.data.user));
   };
 
   useEffect(() => {
-    getKelas();
+    getUsers();
   }, []);
-
   return (
     <>
       <Layout
-        title='Kelas | Bagussr'
-        description='Kelas page to operate main content and classess fron logging user'>
+        title='Forum Kelas'
+        description='This page for handling kelas and dokumen'>
         <NavBar />
         <Box w='100%' h='100%' position='relative'>
           <Box
@@ -59,24 +57,25 @@ export const Kelas = () => {
               maxWidth='100%'
               w={{ base: '100%', md: '75%' }}
               p={{ md: '5', base: '3.5' }}>
-              <Heading as='h1' mb='5'>
-                Kelas Saya
-              </Heading>
-              <Divider mb='5' borderColor='black' />
-              <SimpleGrid spacing='10' minChildWidth='15rem'>
-                {kelas.length > 0 ? (
-                  kelas.map(x => <Card key={x} />)
-                ) : (
-                  <Text>Belum Memiliki Kelas</Text>
-                )}
-              </SimpleGrid>
+              {forum.length > 0 ? null : (
+                <>
+                  <Flex align='center' gap='5'>
+                    <Text>Tambah Kelas</Text>
+                    <Button borderRadius='full' p='0'>
+                      <AiOutlinePlus />
+                    </Button>
+                  </Flex>
+                </>
+              )}
             </Container>
           </Box>
           <SideBar
+            isOpen={isOpen}
+            onClose={onClose}
             animate={animate}
             onOpen={onOpen}
-            isOpen={isOpen}
             setAnimate={setAnimate}
+            name={user?.name}
           />
         </Box>
       </Layout>

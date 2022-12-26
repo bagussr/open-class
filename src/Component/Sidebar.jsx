@@ -1,11 +1,11 @@
 import { Box, Text, IconButton, Icon, Flex } from '@chakra-ui/react';
-
 import { TfiBookmarkAlt } from 'react-icons/tfi';
 import { ImPencil } from 'react-icons/im';
 import { MdOutlineDocumentScanner } from 'react-icons/md';
 import { FiChevronRight } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
-export const SideBar = ({ animate, onOpen, isOpen, setAnimate }) => {
+export const SideBar = ({ animate, onOpen, isOpen, setAnimate, name }) => {
   return (
     <>
       <Box
@@ -27,6 +27,8 @@ export const SideBar = ({ animate, onOpen, isOpen, setAnimate }) => {
           rowGap='3'
           transition='ease 0.3s'>
           <Flex
+            as={Link}
+            to={`../../../kelas/${name}`}
             align='center'
             mt='8'
             columnGap='3'
@@ -52,6 +54,8 @@ export const SideBar = ({ animate, onOpen, isOpen, setAnimate }) => {
             </Text>
           </Flex>
           <Flex
+            as={Link}
+            to={`../../kelas/forum/${name}`}
             align='center'
             columnGap='3'
             role='group'

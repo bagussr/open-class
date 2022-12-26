@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +8,8 @@ export const AuthService = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    auth.key !== null ? navigate('/') : navigate('/login');
-  }, []);
+    auth.authoreized === true ? navigate('/') : navigate('/login');
+  }, [auth]);
 
   return <>{children}</>;
 };
