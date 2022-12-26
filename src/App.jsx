@@ -8,6 +8,7 @@ import { Kelas } from './pages/KelasSaya';
 import { DetailKelas } from './pages/DetailKelas';
 import { Home } from './pages/Home';
 import { Profile } from './pages/Profile';
+import { KelasForum } from './pages/KelasForum';
 
 export const App = () => {
   return (
@@ -17,20 +18,57 @@ export const App = () => {
           exact
           path='/'
           element={
-            // <AuthService>
-            <Home />
-            // </AuthService>
+            <AuthService>
+              <Home />
+            </AuthService>
           }
         />
-        <Route exact path='/kelas/:id' element={<Kelas />} />
+        <Route
+          exact
+          path='/kelas/:id'
+          element={
+            <AuthService>
+              <Kelas />
+            </AuthService>
+          }
+        />
+        <Route
+          exact
+          path='/kelas/forum/:id'
+          element={
+            <AuthService>
+              <KelasForum />
+            </AuthService>
+          }
+        />
         <Route exact path='/Login' element={<Login />} />
         <Route exact path='/signup' element={<Register />} />
-        <Route exact path='/kelas/detail/:id' element={<DetailKelas />} />
-        <Route exact path='/profile/:id' element={<Profile />} />
+        <Route
+          exact
+          path='/kelas/detail/:id'
+          element={
+            <AuthService>
+              <DetailKelas />
+            </AuthService>
+          }
+        />
+        <Route
+          exact
+          path='/profile/:id'
+          element={
+            <AuthService>
+              <Profile />
+            </AuthService>
+          }
+        />
         <Route
           exact
           path='/profile/:id/edit'
-          element={<Profile edit={true} />}
+          element={
+            <AuthService>
+              <Profile edit={true} />
+            </AuthService>
+          }
         />
         <Route exact path='*' element={<h1>Not Found</h1>} />
       </Routes>

@@ -8,8 +8,11 @@ import {
   Button,
   useDisclosure,
   Box,
+  Skeleton,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 import { Layout } from '../Component/Layout';
 import { NavBar } from '../Component/Header/NavBar';
@@ -18,6 +21,25 @@ import { SideBar } from '../Component/Sidebar';
 export const Profile = ({ edit }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [animate, setAnimate] = useState(false);
+  const [user, setUser] = useState();
+  const auth = useSelector(state => state.auth);
+
+  const getUsers = async () => {
+    await axios
+      .get(
+        'https://openclass-api-gateway-production.up.railway.app/users/profiles',
+        {
+          headers: {
+            authorization: `Bearer ${auth.key}`,
+          },
+        }
+      )
+      .then(res => setUser(res.data.data.user));
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <>
@@ -39,16 +61,11 @@ export const Profile = ({ edit }) => {
               src='https://cdn.dribbble.com/users/1782018/screenshots/4592002/dribble_shot.jpg'
             />
             <VStack w='50%' align='start' px='20'>
-              <Heading>Bagus Sr</Heading>
+              <Heading>{user?.name}</Heading>
               <Text color='brand.gray.secondary' fontSize='xl'>
                 Mahasiswa Universitas Pendidikan Indonesia
               </Text>
-              <Text>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
-                quod placeat culpa quia mollitia nulla. Animi aut sapiente
-                molestias, necessitatibus distinctio reprehenderit recusandae
-                repellendus, eum voluptatibus eaque at sed assumenda?
-              </Text>
+              <Text>{user?.email}</Text>
             </VStack>
             {edit === true ? (
               <VStack align='start'>
@@ -92,6 +109,7 @@ export const Profile = ({ edit }) => {
             isOpen={isOpen}
             onOpen={onOpen}
             setAnimate={setAnimate}
+            name={user?.name}
           />
         </Box>
       </Layout>

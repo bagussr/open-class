@@ -12,14 +12,18 @@ import {
   FormErrorMessage,
   FormControl,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoPersonCircle } from 'react-icons/io5';
 import { AiFillLock } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 import { FormLayout } from '../Layout/FormLayout';
 import { Layout } from '../Component/Layout';
 import Apps from '../assets/icon.png';
+import { login } from '../context/Auth/authSlicer';
 
 export const Login = () => {
   const {
@@ -27,9 +31,25 @@ export const Login = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const cookie = new Cookies();
 
-  const onSubmit = data => {
-    console.log(data);
+  const onSubmit = async data => {
+    await axios
+      .post(
+        'https://openclass-api-gateway-production.up.railway.app/users/auth',
+        {
+          email: data.email,
+          password: data.password,
+        }
+      )
+      .then(res => {
+        dispatch(login(res.data.data.token));
+        navigate('../');
+        cookie.set('key', res.data.data.token);
+      })
+      .catch(err => console.log(err));
   };
 
   return (
@@ -52,21 +72,21 @@ export const Login = () => {
               onSubmit={handleSubmit(onSubmit)}
               spacing={{
                 base: 6,
-                md: 10,
+                md: 8,
               }}>
-              <FormControl isInvalid={errors.username}>
+              <FormControl isInvalid={errors.email}>
                 <InputGroup>
-                  <InputLeftElement as='label' htmlFor='username'>
+                  <InputLeftElement as='label' htmlFor='email'>
                     <Icon as={IoPersonCircle} h={8} w={8} mr='4' />
                   </InputLeftElement>
                   <Input
-                    id='username'
-                    name='username'
-                    placeholder='Username'
+                    id='email'
+                    name='email'
+                    placeholder='Email Address'
                     variant='flushed'
                     borderColor='gray.500'
                     type='text'
-                    {...register('username', {
+                    {...register('email', {
                       required: true,
                     })}
                   />
@@ -95,7 +115,7 @@ export const Login = () => {
                 </InputGroup>
               </FormControl>
               <FormErrorMessage>
-                {errors.username?.message}
+                {errors.email?.message}
                 {errors.password?.message}
               </FormErrorMessage>
               <Button variant='brand' type='submit' isLoading={isSubmitting}>
