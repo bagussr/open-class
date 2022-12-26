@@ -20,11 +20,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../context/Auth/authSlicer';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Cookies from 'universal-cookie';
 
 export const NavBar = ({ children }) => {
   const dispact = useDispatch();
   const [user, setUser] = useState();
   const auth = useSelector(state => state.auth);
+  const cookie = new Cookies();
 
   const getUsers = async () => {
     await axios
@@ -93,6 +95,7 @@ export const NavBar = ({ children }) => {
                 <MenuItem
                   onClick={() => {
                     dispact(logout());
+                    cookie.remove('key');
                   }}>
                   Logout
                 </MenuItem>

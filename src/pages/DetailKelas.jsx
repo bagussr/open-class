@@ -12,9 +12,11 @@ import {
   Icon,
   Button,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { BsClockFill } from 'react-icons/bs';
 import { FaMedal } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 import { NavBar } from '../Component/Header/NavBar';
 import { Layout } from '../Component/Layout';
@@ -23,6 +25,27 @@ import { SideBar } from '../Component/Sidebar';
 export const DetailKelas = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [animate, setAnimate] = useState(false);
+  const [kelas, setKelas] = useState();
+  const auth = useSelector(state => state.auth);
+  const id = window.location.href.split('/').pop();
+
+  const getDetail = async id => {
+    await axios
+      .get(
+        `https://openclass-api-gateway-production.up.railway.app/classrooms/${id}`,
+        {
+          headers: {
+            authorization: `Bearer ${auth.key}`,
+          },
+        }
+      )
+      .then(res => setKelas(res.data.data.classroom));
+  };
+
+  useEffect(() => {
+    getDetail(id);
+  }, []);
+
   return (
     <>
       <Layout
@@ -46,7 +69,7 @@ export const DetailKelas = () => {
                 <Image src='https://th.bing.com/th/id/OIP.jfo_cJb62SDLIpTe6xJWTQHaEk?pid=ImgDet&rs=1' />
                 <Stack dir='column'>
                   <Heading as='h2' fontSize='xl'>
-                    Front-End Developer
+                    {kelas?.name}
                   </Heading>
                   <Divider borderColor='black' />
                   <Flex align='center' gap='3'>
@@ -62,16 +85,13 @@ export const DetailKelas = () => {
                   </Flex>
                   <Flex align='center' gap='3'>
                     <Icon as={FaMedal} color='brand.primary.100' w='5' h='5' />
-                    <Text fontSize={{ md: '2xs', base: '3xs' }}>Pemula</Text>
+                    <Text fontSize={{ md: '2xs', base: '3xs' }}>
+                      {kelas?.level}
+                    </Text>
                   </Flex>
-                  <Text>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Explicabo, minima cupiditate, architecto facere iste in
-                    optio eum ea exercitationem dolores autem totam voluptates
-                    obcaecati quod qui sint, ipsum neque repudiandae.
-                  </Text>
+                  <Text>{kelas?.description}</Text>
                 </Stack>
-                <Stack w='full' spacing={3}>
+                <Stack w='2xl' spacing={3}>
                   <Button borderRadius='none' variant='brand'>
                     Mulai Belajar
                   </Button>

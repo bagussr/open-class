@@ -10,18 +10,20 @@ import {
   Divider,
   Image,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 import { BsClockFill } from 'react-icons/bs';
 import { FaMedal } from 'react-icons/fa';
 
-export const Card = ({ name, description, level }) => {
+export const Card = ({ name, description, level, id }) => {
   return (
     <>
       <ChakraCard
+        as={Link}
+        to={`../../../kelas/detail/${id}`}
         maxW='sm'
         size='sm'
-        w={{ md: '100%', base: '11rem' }}
-        as='article'>
+        w={{ md: '100%', base: '11rem' }}>
         <CardHeader w='100%' position='relative' p='0'>
           <Image
             src='https://th.bing.com/th/id/OIP.jfo_cJb62SDLIpTe6xJWTQHaEk?pid=ImgDet&rs=1'

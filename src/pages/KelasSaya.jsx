@@ -20,24 +20,40 @@ export const Kelas = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [animate, setAnimate] = useState(false);
   const [kelas, setKelas] = useState([]);
+  const [user, setUser] = useState();
   const auth = useSelector(state => state.auth);
 
-  const getKelas = async () => {
+  const getKelas = async id => {
     await axios
       .get(
-        'https://openclass-api-gateway-production.up.railway.app/classrooms/my-created-classrooms',
+        `https://openclass-api-gateway-production.up.railway.app/classrooms?owner=${id}`,
         {
           headers: {
             authorization: `Bearer ${auth.key}`,
           },
         }
       )
-      .then(res => setKelas(res.data.data.classrooms));
+      .then(res => setKelas(res.data.data.classrooms))
+      .catch(err => setKelas([]));
+  };
+
+  const getProfile = async () => {
+    await axios
+      .get(
+        'https://openclass-api-gateway-production.up.railway.app/users/profiles',
+        {
+          headers: {
+            authorization: `Bearer ${auth.key}`,
+          },
+        }
+      )
+      .then(res => setUser(res.data.data.user));
   };
 
   useEffect(() => {
-    getKelas();
-  }, []);
+    getProfile();
+    getKelas(user?.id);
+  }, [kelas]);
 
   return (
     <>
@@ -65,7 +81,14 @@ export const Kelas = () => {
               <Divider mb='5' borderColor='black' />
               <SimpleGrid spacing='10' minChildWidth='15rem'>
                 {kelas.length > 0 ? (
-                  kelas.map(x => <Card key={x} />)
+                  kelas.map(x => (
+                    <Card
+                      key={x.id}
+                      name={x.name}
+                      level={x.level}
+                      description={x.description}
+                    />
+                  ))
                 ) : (
                   <Text>Belum Memiliki Kelas</Text>
                 )}

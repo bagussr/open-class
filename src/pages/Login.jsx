@@ -17,11 +17,12 @@ import { IoPersonCircle } from 'react-icons/io5';
 import { AiFillLock } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 import { FormLayout } from '../Layout/FormLayout';
 import { Layout } from '../Component/Layout';
 import Apps from '../assets/icon.png';
-import axios from 'axios';
 import { login } from '../context/Auth/authSlicer';
 
 export const Login = () => {
@@ -32,6 +33,7 @@ export const Login = () => {
   } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cookie = new Cookies();
 
   const onSubmit = async data => {
     await axios
@@ -45,6 +47,7 @@ export const Login = () => {
       .then(res => {
         dispatch(login(res.data.data.token));
         navigate('../');
+        cookie.set('key', res.data.data.token);
       })
       .catch(err => console.log(err));
   };
